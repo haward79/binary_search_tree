@@ -416,11 +416,11 @@ namespace NutnDS
     template <typename T>
     void BST<T>::printTraversal() const
     {
-        std::cout << "Number of node(s): " << tree.getSize() << "\n";
-        tree.printPreorder();
-        tree.printInorder();
-        tree.printPostorder();
-        tree.printLevelorder();
+        std::cout << "Number of node(s): " << size << "\n";
+        printPreorder();
+        printInorder();
+        printPostorder();
+        printLevelorder();
     }
 
     template <typename T>
