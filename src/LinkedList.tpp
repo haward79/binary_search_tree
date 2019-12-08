@@ -16,14 +16,26 @@ namespace NutnDS
     template <typename T>
     Node<T>::Node(const T* data, Node<T>* next)
     {
+        /*
+         *  Create a node with given data and next node pointer.
+         */
+
         this->data = new T(*data);
         this->next = next;
+
+        if(!(this->data))
+            throw HeapMemoryFullException();
     }
 
     // Destructor.
     template <typename T>
     Node<T>::~Node()
     {
+        /*
+         *  Release memory allocation of data.
+         *  Warning: pointer to next node is NOT released.
+         */
+
         delete data;
     }
 
@@ -49,12 +61,16 @@ namespace NutnDS
 
         if(obj->firstNode->getNext() != nullptr)
         {
-            Node<T>* self = firstNode;
-            Node<T>* tmp = obj->firstNode->getNext();
+            Node<T>* self = firstNode;  // Copy target.
+            Node<T>* tmp = obj->firstNode->getNext();  // Copy source.
 
+            // Copy each node.
             do
             {
                 self->setNext(new Node<T>(&tmp->getData(), nullptr));
+
+                if(!(self->getNext()))
+                    throw HeapMemoryFullException();
                 
                 self = self->getNext();
                 tmp = tmp->getNext();
@@ -67,7 +83,14 @@ namespace NutnDS
     template <typename T>
     LinkedList<T>::~LinkedList()
     {
+        /*
+         *  Release memory of data in whole linked list.
+         */
+
+        // Delete nodes which are behind first node.
         clear();
+
+        // Delete first node.
         delete firstNode;
     }
 
@@ -75,12 +98,20 @@ namespace NutnDS
     template <typename T>
     const T& LinkedList<T>::getData() const
     {
+        /*
+         *  With no parameter, the data of last node is returned.
+         */
+
         return getData(size-1);
     }
 
     template <typename T>
     const T& LinkedList<T>::getData(int index) const
     {
+        /*
+         *  Return data of specific node.
+         */
+        
         if(index>=0 && index<size)
             return getNode(index).getData();
         else
@@ -94,6 +125,11 @@ namespace NutnDS
     template <typename T>
     bool LinkedList<T>::setData(int index, const T& data)
     {
+        /*
+         *  Set existing data to another value.
+         *  If the index given doesn't exist, data set operation failed. False is returned.
+         */
+
         if(index>=0 && index<size)
         {
             getNode(index).setData(&data);
@@ -107,6 +143,10 @@ namespace NutnDS
     template <typename T>
     bool LinkedList<T>::addData(const T& data)
     {
+        /*
+         *  Data is added at the end of linkedlist without a index parameter.
+         */
+
         Node<T>* tmp = nullptr;
         Node<T>* newNode = nullptr;
         
@@ -121,14 +161,22 @@ namespace NutnDS
             return true;
         }
         else
+        {
+            throw HeapMemoryFullException();
             return false;
+        }
     }
 
     template <typename T>
     bool LinkedList<T>::addData(int index, const T& data)
     {
+        /*
+         *  Add a new data node at the specific position.
+         *  If the index specified already contains data, the old data node will be moved backward.
+         */
+
         if(index == size)
-            return addData(data);;
+            return addData(data);
         if(index>=0 && index<size)
         {
             Node<T>* tmp = nullptr;
@@ -145,7 +193,10 @@ namespace NutnDS
                 return true;
             }
             else
+            {
+                throw HeapMemoryFullException();
                 return false;
+            }
         }
         else
             return false;
@@ -154,12 +205,20 @@ namespace NutnDS
     template <typename T>
     bool LinkedList<T>::removeData()
     {
+        /*
+         *  The last data node is removed with no index parameter.
+         */
+
         return removeData(size-1);
     }
 
     template <typename T>
     bool LinkedList<T>::removeData(int index)
     {
+        /*
+         *  Remove specific data node.
+         */
+
         if(index>=0 && index<size)
         {
             Node<T>* tmp = nullptr;
@@ -182,6 +241,10 @@ namespace NutnDS
     template <typename T>
     void LinkedList<T>::clear()
     {
+        /*
+         *  Release memory for data in each node in whole linked list.
+         */
+
         Node<T>* tmp = firstNode->getNext();
         Node<T>* tmpNext;
 
@@ -198,6 +261,10 @@ namespace NutnDS
     template <typename T>
     void LinkedList<T>::print()
     {
+        /*
+         *  Print this linked list.
+         */
+
         Node<T>* tmp = firstNode->getNext();
 
         cout << "Size: " << size << " node(s).\n";
@@ -222,7 +289,7 @@ namespace NutnDS
     Node<T>& LinkedList<T>::getNode(int index) const
     {
         /*
-         *  Return node of index.
+         *  Return node of specific index.
          */
 
         if(index == -1)

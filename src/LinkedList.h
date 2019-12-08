@@ -4,6 +4,7 @@
 
     #include <iostream>
     #include "OutOfIndexException.h"
+    #include "HeapMemoryFullException.h"
 
     using std::cout;
 

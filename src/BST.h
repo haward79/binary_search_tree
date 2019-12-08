@@ -68,6 +68,7 @@
                 void printInorder() const;
                 void printPostorder() const;
                 void printLevelorder() const;
+                void printTraversal() const;
                 void printTree() const;
                 T& findMin() const;
                 T& findMax() const;

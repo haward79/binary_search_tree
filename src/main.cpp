@@ -18,11 +18,7 @@ int main()
     while(!tree.read()) {}
 
     // Print tree.
-    cout << "Number of node(s): " << tree.getSize() << "\n";
-    tree.printPreorder();
-    tree.printInorder();
-    tree.printPostorder();
-    tree.printLevelorder();
+    tree.printTraversal();
 
     // Do operation.
     while(choice != "")
@@ -43,11 +39,7 @@ int main()
             switch(choice.at(0))
             {
                 case '1':
-                    cout << "Number of node(s): " << tree.getSize() << "\n";
-                    tree.printPreorder();
-                    tree.printInorder();
-                    tree.printPostorder();
-                    tree.printLevelorder();
+                    tree.printTraversal();
                     break;
 
                 case '2':
