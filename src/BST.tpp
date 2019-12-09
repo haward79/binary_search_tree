@@ -8,6 +8,10 @@ namespace NutnDS
 
     bool isNumber(std::string str)
     {
+        /*
+         *  Check whether the string parameter is a number.
+         */
+
         char tmp = '\0';
         bool hasDot = false;
 
@@ -34,6 +38,10 @@ namespace NutnDS
 
     bool isInteger(std::string str)
     {
+        /*
+         *  Check whether the string parameter is an integer.
+         */
+
         if(isNumber(str) && str.find('.')==string::npos)
             return true;
         else
@@ -42,6 +50,10 @@ namespace NutnDS
 
     bool isFloat(std::string str)
     {
+        /*
+         *  Check whether the string parameter is a float.
+         */
+
         if(isNumber(str) && str.find('.')!=string::npos)
             return true;
         else
@@ -50,6 +62,11 @@ namespace NutnDS
 
     int toInteger(std::string str)
     {
+        /*
+         *  Convert the string parameter to an integer.
+         *  If the string parameter is not an integer, 0 is returned.
+         */
+
         int extracted = 0;
 
         if(isInteger(str))
@@ -65,6 +82,11 @@ namespace NutnDS
 
     int toFloat(std::string str)
     {
+        /*
+         *  Convert the string parameter to a float.
+         *  If the string parameter is not a float, 0 is returned.
+         */
+
         float extracted = 0;
         int count = 0;
 
@@ -86,8 +108,26 @@ namespace NutnDS
             return 0;
     }
 
+    int power(int base, int exp)
+    {
+        /*
+         *  Calculate power and return.
+         */
+
+        int ans = 1;
+
+        for(int i=0; i<exp; ++i)
+            ans *= base;
+
+        return ans;
+    }
+
     double power(double base, int exp)
     {
+        /*
+         *  Calculate power and return.
+         */
+
         double ans = 1;
 
         for(int i=0; i<exp; ++i)
@@ -140,9 +180,16 @@ namespace NutnDS
             delete right;
     }
 
+    // Mutator.
     template <typename T>
     const T& BSTnode<T>::setData(const T& data)
     {
+        /*
+         *  Set a new data for this node.
+         *  Old data is released from heap memory.
+         *  New data is returned.
+         */
+
         delete &data;
         data = *(new T(data));
 
@@ -152,6 +199,12 @@ namespace NutnDS
     template <typename T>
     BSTnode<T>* BSTnode<T>::setLeft(BSTnode<T>* left)
     {
+        /*
+         *  Set a new left node.
+         *  Old left node is released from heap memory.
+         *  New left node is returned.
+         */
+
         delete this->left;
         this->left = left;
 
@@ -161,6 +214,12 @@ namespace NutnDS
     template <typename T>
     BSTnode<T>* BSTnode<T>::setRight(BSTnode<T>* right)
     {
+        /*
+         *  Set a new right node.
+         *  Old right node is released from heap memory.
+         *  New right node is returned.
+         */
+
         delete this->right;
         this->right = right;
 
@@ -192,14 +251,15 @@ namespace NutnDS
          *  Add a data to the tree.
          */
 
-        if(first == nullptr)
+        if(first == nullptr)  // Current tree is empty.
         {
+            // Create first node.
             first = new BSTnode<T>(*(new T(data)));
 
             ++size;
             return true;
         }
-        else
+        else  // Current tree is not empty.
         {
             BSTnode<T>* tmp = first;
 
@@ -262,9 +322,11 @@ namespace NutnDS
         BSTnode<T>* tmp = first;
         LinkedList<T>* subnodes = nullptr;
 
+        // This tree is empty.
         if(size <= 0)
             return false;
         
+        // Root node is equal to the data parameter.
         if(data == tmp->getData())
         {
             subnodes = &preorderTraversal(tmp);
@@ -279,6 +341,7 @@ namespace NutnDS
             return true;
         }
 
+        // Search node whose data is equal to data parameter.
         while(tmp)
         {
             if(tmp->getLeft() && data==tmp->getLeft()->getData())  // data exists at left node.
@@ -319,6 +382,11 @@ namespace NutnDS
     template <typename T>
     int BST<T>::find(const T& data)
     {
+        /*
+         *  Get the order of the data in the tree. The order start from 0(minimum).
+         *  If the data doesn't exist in the tree, -1 is returned.
+         */
+        
         LinkedList<T>& ordered = inorderTraversal(first);
 
         for(int i=0, len=ordered.getSize(); i<len; ++i)
@@ -333,6 +401,11 @@ namespace NutnDS
     template <typename T>
     void BST<T>::clear()
     {
+        /*
+         *  Release heap memory for all nodes in the tree.
+         *  Reset size to 0.
+         */
+
         delete first;
         size = 0;
     }
@@ -341,7 +414,7 @@ namespace NutnDS
     void BST<T>::printPreorder() const
     {
         /*
-         *  Print the tree.
+         *  Print the tree in preorder.
          */
 
         LinkedList<T>& traversal = preorderTraversal(first);
@@ -360,7 +433,7 @@ namespace NutnDS
     void BST<T>::printInorder() const
     {
         /*
-         *  Print the tree.
+         *  Print the tree in inorder.
          */
 
         LinkedList<T>& traversal = inorderTraversal(first);
@@ -379,7 +452,7 @@ namespace NutnDS
     void BST<T>::printPostorder() const
     {
         /*
-         *  Print the tree.
+         *  Print the tree in postorder.
          */
 
         LinkedList<T>& traversal = postorderTraversal(first);
@@ -398,7 +471,7 @@ namespace NutnDS
     void BST<T>::printLevelorder() const
     {
         /*
-         *  Print the tree.
+         *  Print the tree in level order.
          */
 
         LinkedList<T>& traversal = levelorderTraversal(first);
@@ -416,6 +489,11 @@ namespace NutnDS
     template <typename T>
     void BST<T>::printTraversal() const
     {
+        /*
+         *  Print the number of nodes in the tree.
+         *  Print all traversals.
+         */
+
         std::cout << "Number of node(s): " << size << "\n";
         printPreorder();
         printInorder();
@@ -427,13 +505,14 @@ namespace NutnDS
     void BST<T>::printTree() const
     {
         /*
-         *  Print the tree.
+         *  Print the tree in tree structure.
          */
 
-        int level = 0;
-        LinkedList<T>& traversal = levelorderTraversal(first);
-        LinkedList<bool>& isVacant = vacantLevelorderTraversal(first);
+        int level = 0;  // Store level of the tree.
+        LinkedList<T>& traversal = levelorderTraversal(first);  // Store level order traversal of the tree.
+        LinkedList<bool>& isVacant = vacantLevelorderTraversal(first);  // Store which position in level order traversal is empty(true).
 
+        // Evaluate level of the tree.
         for(int i=0, j=0, k=0, len=traversal.getSize(); j<len; ++i)
         {
             if(!isVacant.getData(i))
@@ -450,23 +529,25 @@ namespace NutnDS
 
         std::cout << "Tree level: " << level << "\n";
 
+        // Print structure of the tree.
         std::cout << "Tree structure:\n";
         
-        for(int i=0, j=0, k=0, len=traversal.getSize(); j<len; ++i)
+        for(int i=0, traversalFlag=0, vacantFlag=0; i<level; ++i)
         {
-            if(isVacant.getData(i))
-                std::cout << " --";
-            else
+            std::cout << " " << std::setw(2) << i+1 << " |";
+
+            for(int j=0, levelNodes=power(2, i); j<levelNodes; ++j, ++vacantFlag)
             {
-                std::cout << " " << std::setw(2) << traversal.getData(j);
-                ++j;
+                if(isVacant.getData(vacantFlag))
+                    std::cout << " --";
+                else
+                {
+                    std::cout << " " << std::setw(2) << traversal.getData(traversalFlag);
+                    ++traversalFlag;
+                }
             }
 
-            if(i == k)
-            {
-                std::cout << "\n";
-                k = (k+2)*2-2;
-            }
+            std::cout << "\n";
         }
 
         std::cout << "\n";
@@ -500,6 +581,16 @@ namespace NutnDS
     template <typename T>
     bool BST<T>::read()
     {
+        /*
+         *  Input filename and data seperator to read data of nodes from file.
+         *  If file opened successfully, true is returned. Otherwise, false is returned.
+         *  
+         *  Note:
+         *  This function is written for integer data of nodes.
+         *  However, float conversion tools and diagnose tools are also written in this program.
+         *  To handle float type data of nodes, rewrite following codes and main function.
+         */
+
         using std::cout;
         using std::cin;
         using std::string;
@@ -512,25 +603,32 @@ namespace NutnDS
 
         cout << "== Read a BST from file ==\n";
 
+        // Input filename.
         cout << "Please input file name: ";
         getline(cin, filename);
 
+        // Input data of nodes seperator.
         cout << "Please input seperator for nodes: ";
         scanf("%c", &seperator);
         getline(cin, tmp);
 
+        // Open input file stream.
         fin.open(filename);
 
-        if(fin)
+        if(fin)  // Input file stream opened successfully.
         {
             while(!fin.eof())
             {
+                // Read a data for a node.
                 getline(fin, tmp, seperator);
 
+                // Validate data.
                 if(isInteger(tmp))
                 {
+                    // Convert data from string to integer.
                     data = toInteger(tmp);
                     
+                    // Check whether data has already existed.
                     if(insert(*(new int(data))))
                         cout << "'" << data << "' added.\n";
                     else
@@ -540,11 +638,12 @@ namespace NutnDS
                     cout << "'" << tmp << "' is invalid node value. Integers only!\n";
             }
 
+            // Close input file stream.
             fin.close();
 
             return true;
         }
-        else
+        else  // Input file stream opened failed.
         {
             cout << "Unable to open file: '" << filename << "'.\n\n";
 

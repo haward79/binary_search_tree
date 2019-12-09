@@ -18,6 +18,7 @@
         bool isFloat(std::string);
         int toInteger(std::string);
         int toFloat(std::string);
+        int power(int, int);
         double power(double, int);
 
         template <typename T>
