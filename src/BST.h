@@ -8,6 +8,8 @@
     #include <fstream>
     #include "LinkedList.h"
     #include "Stack.h"
+    #include "Exception.h"
+    #include "OutOfIndexException.h"
     #include "HeapMemoryFullException.h"
 
     namespace NutnDS
@@ -20,6 +22,7 @@
         int toFloat(std::string);
         int power(int, int);
         double power(double, int);
+        std::string toLevelNodesStr(LinkedList<string>&, int);
 
         template <typename T>
         class BSTnode

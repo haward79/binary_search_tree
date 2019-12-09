@@ -136,6 +136,56 @@ namespace NutnDS
         return ans;
     }
 
+    std::string toLevelNodesStr(LinkedList<string>& levelNodes, int maxLevel)
+    {
+        /*
+         *  Convert string typed data to a formatted string.
+         *  Only two or less size string is supported.
+         *  Otherwise, empty string is returned and exception is throwed.
+         */
+
+        int numSpaces = power(2, maxLevel-1)*3;
+        int numNodes = levelNodes.getSize();
+        char formatted[10000];
+        char tmp[3];
+
+        // Check string length for each node.
+        for(int i=0, len=levelNodes.getSize(); i<len; ++i)
+        {
+            if(levelNodes.getData(i).length() > 2)
+                return "";
+        }
+
+        // Set initial value for formatted char array.
+        for(int i=0; i<numSpaces; ++i)
+            formatted[i] = ' ';
+
+        // Convert data of nodes to string.
+        for(int i=0, isFinalLevel=(numNodes*3==numSpaces), index=0; i<numNodes; ++i)
+        {
+            if(isFinalLevel)
+                index = numSpaces / numNodes * i;
+            else
+                index = numSpaces / (numNodes+1) * (i+1);
+            
+            for(int j=0; j<levelNodes.getData(i).length(); ++j)
+            {
+                if(index+j+1 < 10000)
+                    formatted[index+j+1] = levelNodes.getData(i).at(j);
+                else
+                {
+                    throw OutOfIndexException();
+                    return "";
+                }
+            }
+        }
+
+        // Add char string ending char.
+        formatted[numSpaces] = '\0';
+
+        return *(new string(formatted));
+    }
+
     /*
      *  BST node.
      */
@@ -511,6 +561,8 @@ namespace NutnDS
         int level = 0;  // Store level of the tree.
         LinkedList<T>& traversal = levelorderTraversal(first);  // Store level order traversal of the tree.
         LinkedList<bool>& isVacant = vacantLevelorderTraversal(first);  // Store which position in level order traversal is empty(true).
+        LinkedList<string>& levelNodes = *(new LinkedList<string>);
+        std::string levelNodesStr = "";
 
         // Evaluate level of the tree.
         for(int i=0, j=0, k=0, len=traversal.getSize(); j<len; ++i)
@@ -536,18 +588,27 @@ namespace NutnDS
         {
             std::cout << " " << std::setw(2) << i+1 << " |";
 
-            for(int j=0, levelNodes=power(2, i); j<levelNodes; ++j, ++vacantFlag)
+            levelNodes.clear();
+
+            // Add each nodes in current level to linked list.
+            for(int j=0, numLevelNodes=power(2, i); j<numLevelNodes; ++j, ++vacantFlag)
             {
                 if(isVacant.getData(vacantFlag))
-                    std::cout << " --";
+                    levelNodes.addData("--");
                 else
                 {
-                    std::cout << " " << std::setw(2) << traversal.getData(traversalFlag);
+                    levelNodes.addData(std::to_string(traversal.getData(traversalFlag)));
                     ++traversalFlag;
                 }
             }
 
-            std::cout << "\n";
+            // Convert nodes to an formatted string.
+            levelNodesStr = toLevelNodesStr(levelNodes, level);
+
+            if(levelNodesStr != "")
+                std::cout << levelNodesStr << "\n";
+            else
+                std::cout << " Unsupported format.\n";
         }
 
         std::cout << "\n";
